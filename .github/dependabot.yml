@@ -23,3 +23,10 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    groups:
+      actions:
+        update-types: [minor, patch]
+    ignore:
+      # Majors are done by hand in the template, then rolled out.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
