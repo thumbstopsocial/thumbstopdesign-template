@@ -1,0 +1,17 @@
+/*
+ * Design tokens for this site. Replaced by /new-site with the CSS variables
+ * from design/deck.html, then mapped into the Tailwind theme below.
+ * The template ships no visual style: these placeholders are plain on purpose.
+ */
+:root {
+  --color-background: #ffffff;
+  --color-foreground: #111111;
+  /* Used by the generated OG image and icon. */
+  --og-background: #111111;
+  --og-foreground: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+}

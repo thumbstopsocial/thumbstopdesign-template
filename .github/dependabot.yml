@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/London
+    open-pull-requests-limit: 5
+    groups:
+      # Patch updates: auto-merged once every check passes.
+      patch:
+        update-types: [patch]
+      # Minor updates: one PR a week for review.
+      minor:
+        update-types: [minor]
+    ignore:
+      # Majors are done by hand in the template, then rolled out.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

@@ -1,0 +1,65 @@
+# Every check is a script, not an AI review. A PR can't merge unless all pass.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      RESEND_API_KEY: re_dummy
+      BASE_URL: http://localhost:3000
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      - name: Types
+        run: npm run typecheck
+      - name: Build (runs lint and the site check first)
+        run: npm run build
+
+      - name: Start the site
+        run: |
+          npm run start -- -p 3000 > next.log 2>&1 &
+          npx --yes wait-on@8 -t 60000 http://localhost:3000
+
+      - name: Copy lint
+        run: npm run check:copy
+      - name: Security headers
+        run: npm run check:headers
+      - name: Redirects
+        run: npm run check:redirects
+      - name: Links
+        run: npm run check:links
+      - name: Consent
+        run: npm run check:consent
+      - name: Accessibility
+        run: npm run check:a11y
+      - name: Lighthouse
+        run: npm run check:lighthouse
+
+      - name: Upload reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            next.log
+            qa/lighthouse
+            playwright-report
+            test-results
+          if-no-files-found: ignore

@@ -1,0 +1,32 @@
+# Runs against the Vercel preview once it's deployed: the real contact form
+# (sent to delivered@resend.dev via RESEND_TEST_RECIPIENT), plus headers and
+# redirects as served by Vercel.
+name: Preview
+
+on:
+  deployment_status:
+
+jobs:
+  preview:
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Preview'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      BASE_URL: ${{ github.event.deployment_status.environment_url || github.event.deployment_status.target_url }}
+      VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Security headers
+        run: npm run check:headers
+      - name: Redirects
+        run: npm run check:redirects
+      - name: Contact form sends through Resend
+        run: npm run check:form

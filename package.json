@@ -4,16 +4,35 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run lint && npm run check:site",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "check:site": "tsx scripts/site-check.ts",
+    "check:copy": "tsx scripts/copy-lint.ts",
+    "check:headers": "tsx scripts/headers-check.ts",
+    "check:redirects": "tsx scripts/redirect-check.ts",
+    "check:links": "tsx scripts/link-check.ts",
+    "check:a11y": "playwright test tests/a11y.spec.ts",
+    "check:form": "playwright test tests/form.spec.ts",
+    "check:lighthouse": "tsx scripts/lighthouse.ts",
+    "qa:screenshots": "tsx scripts/qa-screenshots.ts",
+    "check:consent": "playwright test tests/consent.spec.ts"
   },
   "dependencies": {
+    "@upstash/ratelimit": "^2.2.0",
+    "@upstash/redis": "^1.39.0",
     "next": "16.4.0",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "resend": "^6.32.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -21,6 +40,10 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=20.9"
   }
 }
