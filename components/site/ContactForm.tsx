@@ -57,7 +57,7 @@ export function ContactForm({ form }: { form: PublicForm }) {
         );
       })}
       <div {...honeypot.wrapperProps}>
-        <label htmlFor="hp-field">Leave this blank</label>
+        <label htmlFor="hp-field">{honeypot.label}</label>
         <input id="hp-field" {...honeypot.inputProps} />
       </div>
       {error ? <p role="alert">{error}</p> : null}
