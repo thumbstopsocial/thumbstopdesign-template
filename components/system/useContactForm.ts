@@ -13,7 +13,7 @@ export type ContactFormStatus = "idle" | "sending" | "success" | "error";
 
 const ERROR_MESSAGES: Record<string, string> = {
   too_fast: "That was quick. Please check your details and send again.",
-  rate_limited: "Too many attempts. Please wait a few minutes and try again.",
+  rate_limited: "Too many attempts. Please wait a few minutes and try again, or email us directly.",
   send_failed: "Your message could not be sent. Please try again or email us directly.",
   validation: "Please check the highlighted fields.",
 };
@@ -83,8 +83,13 @@ export function useContactForm(form: PublicForm) {
     fields: form.fields,
     successMessage: form.successMessage,
     formProps: { onSubmit, "aria-busy": status === "sending" },
-    /** Render inside the form. Hidden from people and screen readers; bots fill it in. */
+    /**
+     * Render inside the form, with the label. Hidden from people and screen
+     * readers; spam bots fill it in. The label tells AI agents filling the form
+     * for a real person to leave it alone, so their enquiry isn't silently dropped.
+     */
     honeypot: {
+      label: "Leave this blank. It's a spam check, not part of your enquiry.",
       wrapperProps: { style: hiddenStyle, "aria-hidden": true as const },
       inputProps: { name: form.honeypotField, type: "text", tabIndex: -1, autoComplete: "off", defaultValue: "" },
     },
