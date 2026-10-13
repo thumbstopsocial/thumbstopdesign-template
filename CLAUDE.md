@@ -34,3 +34,5 @@ All checks are scripts. Run them; don't review by reading the code.
 
 ## Git
 Work on a branch. Never push to or merge into `main`; a hook asks for confirmation if you try.
+
+The process (the SOP) lives in the ThumbStop Web Design project in Claude, not in this repo. If a change alters how a client is taken from audit to live, or what every site gets, end the PR description with a line starting `SOP:` saying what changed, so the SOP gets updated.
