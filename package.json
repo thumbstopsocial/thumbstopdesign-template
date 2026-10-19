@@ -26,11 +26,11 @@
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "resend": "^6.32.1",
+    "resend": "^6.33.0",
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.13.0",
+    "@axe-core/playwright": "^4.14.0",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.64.0",
     "@tailwindcss/turbopack": "^4",
